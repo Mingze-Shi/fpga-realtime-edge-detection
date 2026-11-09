@@ -1,0 +1,16 @@
+{
+  "artifact": "delivery_filter5_cleanup/ti60f225_oob.bit",
+  "sha256": "2C2404DA920F51BE82634108CC8859919C22234D7CAE36046A788641C2935ECC",
+  "hex_artifact": "delivery_filter5_cleanup/ti60f225_oob.hex",
+  "hex_sha256": "899BE98CBB31D0DD705306A66BB47F43EE54A83BE08CAE66A27CB5718DBD4EC1",
+  "programming_mode": "SPI Flash via JTAG bridge, followed by JTAG SRAM load",
+  "programmer_exit_code": 0,
+  "flash_device": "Winbond W25Q64 8 MiB",
+  "jedec_id": "0xEF6017",
+  "flash_verify_success": true,
+  "final_jtag_load_success": true,
+  "power_cycle_boot_verified": false,
+  "stream_initial_threshold": 32,
+  "sharp_gain_effective_q14": 29999,
+  "spatial_cleanup": true
+}

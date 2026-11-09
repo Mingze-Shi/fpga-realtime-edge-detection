@@ -1,0 +1,8 @@
+{
+  "label_mapping_and_source_hashes": true,
+  "unique_input_arrays": 960,
+  "five_classes_balanced": true,
+  "saved_model_predictions_reproduced": true,
+  "int8_numpy_torch_exact_cases": 10,
+  "fpga_rtl_checked": false
+}

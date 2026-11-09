@@ -1,0 +1,65 @@
+{
+  "method": "4-bit grayscale, DC-compensated masked SAD, four classes, 5x5 shared translation search",
+  "trained": false,
+  "classes": [
+    {
+      "id": 1,
+      "name": "露齿笑",
+      "source": "微信图片_202610281715_1.jpg",
+      "crop": [
+        230,
+        690,
+        1030,
+        1090
+      ]
+    },
+    {
+      "id": 2,
+      "name": "放松",
+      "source": "微信图片_202610281715_2.jpg",
+      "crop": [
+        280,
+        630,
+        1040,
+        1010
+      ]
+    },
+    {
+      "id": 3,
+      "name": "哭泣",
+      "source": "微信图片_202610281715_3.jpg",
+      "crop": [
+        280,
+        710,
+        1060,
+        1100
+      ]
+    },
+    {
+      "id": 4,
+      "name": "睁眼张嘴",
+      "source": "微信图片_202610282000_5.jpg",
+      "crop": [
+        220,
+        500,
+        900,
+        840
+      ]
+    }
+  ],
+  "side": 32,
+  "search_radius": 2,
+  "reference_means": [
+    12,
+    12,
+    12,
+    12
+  ],
+  "max_error": 1100,
+  "min_margin": 70,
+  "min_gray_range": 3,
+  "masked_pixels": 700,
+  "template_bits": 16384,
+  "frame_buffer_bits": 8192,
+  "scope": "four supplied face patterns in a fixed, manually aligned 2:1 ROI; not general emotion or identity recognition"
+}

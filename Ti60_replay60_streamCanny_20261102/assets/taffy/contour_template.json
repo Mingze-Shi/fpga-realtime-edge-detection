@@ -1,0 +1,22 @@
+{
+  "sample_grid": [
+    64,
+    64
+  ],
+  "contour_grid": [
+    16,
+    16
+  ],
+  "gradient_threshold": 24,
+  "cell_min_edge_samples": 2,
+  "patch_grid": [
+    6,
+    6
+  ],
+  "reference_patches": 33,
+  "min_detail_cells": 6,
+  "max_detail_cells": 28,
+  "min_direction_changes": 3,
+  "max_bit_mismatches": 8,
+  "method": "any detailed local contour patch matches at any position inside ROI; no scale or rotation search"
+}

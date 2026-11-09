@@ -1,0 +1,84 @@
+{
+  "train": 16,
+  "synthetic_validation": 4,
+  "positive_label": "original goggle image face; not all Taffy expressions",
+  "source_provenance": [
+    {
+      "id": "target_original",
+      "path": "sources/taffy_original.png",
+      "sha256": "51c4919cab904d8303a1960612f7eeafa352b33caa93740e3dffd43b41771868",
+      "box": [
+        220,
+        500,
+        900,
+        840
+      ],
+      "label": 1
+    },
+    {
+      "id": "teeth",
+      "path": "sources/微信图片_202610281715_1.jpg",
+      "sha256": "3066fd4bd5c210ea4ea88e074a8af81ce9b08a4895bb3f966eaf0044c7b7a3e9",
+      "box": [
+        230,
+        690,
+        1030,
+        1090
+      ],
+      "label": 0
+    },
+    {
+      "id": "relaxed",
+      "path": "sources/微信图片_202610281715_2.jpg",
+      "sha256": "a230e1d476b4de1ba0e00a10ad2ae90f16c4d9fd4caaeb448e8fcce5d71d9469",
+      "box": [
+        280,
+        630,
+        1040,
+        1010
+      ],
+      "label": 0
+    },
+    {
+      "id": "cry",
+      "path": "sources/微信图片_202610281715_3.jpg",
+      "sha256": "da6e2f623fd0559dad06eaaa1b73455664b77b8e482fa31d8784f75afad1adaa",
+      "box": [
+        280,
+        710,
+        1060,
+        1100
+      ],
+      "label": 0
+    },
+    {
+      "id": "target_generated_1",
+      "path": "generated/camera_sim_01.png",
+      "sha256": "77559b0740f5a97e9d5fbcb12ac86a3cde60f0d88d5af8c10ad437828b4d2f2e",
+      "fractional_box": [
+        0.2,
+        0.45,
+        0.84,
+        0.76
+      ],
+      "label": 1,
+      "synthetic": true
+    },
+    {
+      "id": "target_generated_2",
+      "path": "generated/camera_sim_02.png",
+      "sha256": "919e621c76ff6f08adcc18396b6d11363d82b22f5d3f2c54b39cae0b391455fd",
+      "fractional_box": [
+        0.2,
+        0.45,
+        0.84,
+        0.76
+      ],
+      "label": 1,
+      "synthetic": true
+    }
+  ],
+  "photo_files_used_for_training": 0,
+  "synthetic_source_overlap": true,
+  "scope": "Same-source development only. No sensor-calibrated simulator, no independent camera accuracy."
+}

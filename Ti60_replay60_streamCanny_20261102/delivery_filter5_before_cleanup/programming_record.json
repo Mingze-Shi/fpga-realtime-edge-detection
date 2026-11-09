@@ -1,0 +1,13 @@
+{
+  "artifact": "outflow_filter5/ti60f225_oob.bit",
+  "sha256": "8C4E35B6AC2175AF8220E61B27B0B55BE2D41611A0F3F19C58125B4052FB3651",
+  "bytes": 2948040,
+  "programming_mode": "JTAG SRAM",
+  "programmer_exit_code": 0,
+  "device_id": "0x10660A79",
+  "setup_min_slack_ns": 0.167,
+  "hold_min_slack_ns": 0.026,
+  "interface_regenerated": true,
+  "display_verified": false,
+  "note": "Rebuilt after fixing missing interface placement constraints; awaiting user display confirmation"
+}

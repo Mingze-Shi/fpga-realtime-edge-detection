@@ -1,0 +1,75 @@
+{
+  "model": {
+    "input_shape": [
+      1,
+      1,
+      32,
+      32
+    ],
+    "input": "32x32 face ROI; integer min-max normalization with range<16 gate, then divided by 255",
+    "layers": "conv3x3(1,4)-relu-pool2-conv3x3(4,8)-relu-pool2-conv3x3(8,8)-relu-global_average-linear(8,2)",
+    "parameters": 938,
+    "fpga_synthesis_completed": false,
+    "camera_accuracy_measured": false
+  },
+  "labels": [
+    "其他或无效画面",
+    "原始塔菲图案"
+  ],
+  "epochs_completed": 200,
+  "best_epoch": 200,
+  "device": "cpu",
+  "torch": "2.9.1+cpu",
+  "elapsed_seconds": 1.163400499994168,
+  "initial_synthetic_validation": {
+    "loss": 0.7005452513694763,
+    "accuracy": 0.5,
+    "confusion_matrix_rows_true_columns_predicted": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ]
+  },
+  "train": {
+    "loss": 0.009976420551538467,
+    "accuracy": 1.0,
+    "confusion_matrix_rows_true_columns_predicted": [
+      [
+        8,
+        0
+      ],
+      [
+        0,
+        8
+      ]
+    ]
+  },
+  "synthetic_validation": {
+    "loss": 0.012847860343754292,
+    "accuracy": 1.0,
+    "confusion_matrix_rows_true_columns_predicted": [
+      [
+        2,
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ]
+  },
+  "synthetic_stress": null,
+  "real_camera_test": {
+    "images": 0,
+    "accuracy": null
+  },
+  "fpga_deployed": false,
+  "quantization_validated": false,
+  "checkpoint_reload_exact": true,
+  "warning": "Same-source development validation. Photo diagnostics are evaluated separately after training and are not independent sensor-frame tests. No claim of FPGA readiness."
+}

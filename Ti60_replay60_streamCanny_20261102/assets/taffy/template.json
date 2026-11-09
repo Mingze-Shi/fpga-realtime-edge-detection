@@ -1,0 +1,14 @@
+{
+  "source_sha256": "c5e18500fbbfe174394e93c2b364076fa41b46ec22950a4eb58238d55d4ce379",
+  "original_size": [
+    1080,
+    1115
+  ],
+  "template_size": [
+    64,
+    64
+  ],
+  "gradient_energy": 91480,
+  "gradient_rom_bits": 36864,
+  "method": "horizontal grayscale differences, absolute error <= 0.75 reference energy; input energy 0.25 to 2 times reference"
+}

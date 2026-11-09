@@ -1,0 +1,464 @@
+{
+  "cases": [
+    {
+      "index": 0,
+      "name": "synthetic_test_0",
+      "label": 0,
+      "logits": [
+        1953,
+        -7,
+        1110,
+        -1342,
+        1007
+      ],
+      "winner": 0,
+      "accepted": false
+    },
+    {
+      "index": 1,
+      "name": "synthetic_test_1",
+      "label": 0,
+      "logits": [
+        1394,
+        -563,
+        1546,
+        178,
+        708
+      ],
+      "winner": 2,
+      "accepted": false
+    },
+    {
+      "index": 2,
+      "name": "synthetic_test_2",
+      "label": 0,
+      "logits": [
+        2276,
+        -590,
+        1308,
+        -1467,
+        1786
+      ],
+      "winner": 0,
+      "accepted": false
+    },
+    {
+      "index": 3,
+      "name": "synthetic_test_32",
+      "label": 1,
+      "logits": [
+        425,
+        1461,
+        938,
+        -27,
+        -1538
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 4,
+      "name": "synthetic_test_33",
+      "label": 1,
+      "logits": [
+        781,
+        1602,
+        668,
+        -782,
+        -1252
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 5,
+      "name": "synthetic_test_34",
+      "label": 1,
+      "logits": [
+        284,
+        1455,
+        1059,
+        351,
+        -1756
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 6,
+      "name": "synthetic_test_64",
+      "label": 2,
+      "logits": [
+        198,
+        159,
+        1519,
+        1245,
+        -783
+      ],
+      "winner": 2,
+      "accepted": true
+    },
+    {
+      "index": 7,
+      "name": "synthetic_test_65",
+      "label": 2,
+      "logits": [
+        1109,
+        285,
+        1139,
+        -844,
+        405
+      ],
+      "winner": 2,
+      "accepted": false
+    },
+    {
+      "index": 8,
+      "name": "synthetic_test_66",
+      "label": 2,
+      "logits": [
+        1231,
+        195,
+        1276,
+        -911,
+        583
+      ],
+      "winner": 2,
+      "accepted": false
+    },
+    {
+      "index": 9,
+      "name": "synthetic_test_96",
+      "label": 3,
+      "logits": [
+        -45,
+        559,
+        1414,
+        1369,
+        -1344
+      ],
+      "winner": 2,
+      "accepted": false
+    },
+    {
+      "index": 10,
+      "name": "synthetic_test_97",
+      "label": 3,
+      "logits": [
+        20,
+        366,
+        1496,
+        1817,
+        -1437
+      ],
+      "winner": 3,
+      "accepted": true
+    },
+    {
+      "index": 11,
+      "name": "synthetic_test_98",
+      "label": 3,
+      "logits": [
+        825,
+        195,
+        1278,
+        428,
+        -374
+      ],
+      "winner": 2,
+      "accepted": true
+    },
+    {
+      "index": 12,
+      "name": "synthetic_test_128",
+      "label": 4,
+      "logits": [
+        2417,
+        -873,
+        1259,
+        -2866,
+        3153
+      ],
+      "winner": 4,
+      "accepted": true
+    },
+    {
+      "index": 13,
+      "name": "synthetic_test_129",
+      "label": 4,
+      "logits": [
+        4336,
+        -551,
+        974,
+        -5910,
+        4749
+      ],
+      "winner": 4,
+      "accepted": true
+    },
+    {
+      "index": 14,
+      "name": "synthetic_test_130",
+      "label": 4,
+      "logits": [
+        2790,
+        -756,
+        1505,
+        -2810,
+        2993
+      ],
+      "winner": 4,
+      "accepted": false
+    },
+    {
+      "index": 15,
+      "name": "photo_1",
+      "label": 4,
+      "logits": [
+        2807,
+        -884,
+        1264,
+        -3438,
+        3545
+      ],
+      "winner": 4,
+      "accepted": true
+    },
+    {
+      "index": 16,
+      "name": "photo_2",
+      "label": 3,
+      "logits": [
+        -200,
+        -417,
+        1850,
+        2578,
+        -991
+      ],
+      "winner": 3,
+      "accepted": true
+    },
+    {
+      "index": 17,
+      "name": "photo_3",
+      "label": 3,
+      "logits": [
+        -389,
+        -271,
+        1897,
+        2956,
+        -1408
+      ],
+      "winner": 3,
+      "accepted": true
+    },
+    {
+      "index": 18,
+      "name": "photo_4",
+      "label": 4,
+      "logits": [
+        3539,
+        84,
+        1148,
+        -4462,
+        3081
+      ],
+      "winner": 0,
+      "accepted": false
+    },
+    {
+      "index": 19,
+      "name": "photo_5",
+      "label": 1,
+      "logits": [
+        934,
+        1889,
+        646,
+        -976,
+        -1476
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 20,
+      "name": "photo_6",
+      "label": 1,
+      "logits": [
+        662,
+        1993,
+        635,
+        -596,
+        -1853
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 21,
+      "name": "photo_7",
+      "label": 2,
+      "logits": [
+        889,
+        -2,
+        1546,
+        549,
+        -160
+      ],
+      "winner": 2,
+      "accepted": true
+    },
+    {
+      "index": 22,
+      "name": "photo_8",
+      "label": 2,
+      "logits": [
+        968,
+        80,
+        1413,
+        234,
+        -69
+      ],
+      "winner": 2,
+      "accepted": true
+    },
+    {
+      "index": 23,
+      "name": "photo_9",
+      "label": 4,
+      "logits": [
+        3067,
+        -641,
+        1167,
+        -4138,
+        3738
+      ],
+      "winner": 4,
+      "accepted": true
+    },
+    {
+      "index": 24,
+      "name": "original_1",
+      "label": 1,
+      "logits": [
+        548,
+        2202,
+        727,
+        -603,
+        -2037
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 25,
+      "name": "original_2",
+      "label": 2,
+      "logits": [
+        615,
+        21,
+        1600,
+        800,
+        -319
+      ],
+      "winner": 2,
+      "accepted": true
+    },
+    {
+      "index": 26,
+      "name": "original_3",
+      "label": 3,
+      "logits": [
+        -879,
+        25,
+        1922,
+        3458,
+        -2056
+      ],
+      "winner": 3,
+      "accepted": true
+    },
+    {
+      "index": 27,
+      "name": "original_4",
+      "label": 4,
+      "logits": [
+        2858,
+        -1363,
+        1451,
+        -3183,
+        3947
+      ],
+      "winner": 4,
+      "accepted": true
+    },
+    {
+      "index": 28,
+      "name": "zero",
+      "label": null,
+      "logits": [
+        1184,
+        165,
+        -278,
+        -1550,
+        715
+      ],
+      "winner": 0,
+      "accepted": false
+    },
+    {
+      "index": 29,
+      "name": "white",
+      "label": null,
+      "logits": [
+        3892,
+        -1376,
+        1055,
+        -3479,
+        3895
+      ],
+      "winner": 4,
+      "accepted": false
+    },
+    {
+      "index": 30,
+      "name": "noise",
+      "label": null,
+      "logits": [
+        -230,
+        2770,
+        255,
+        -662,
+        -2656
+      ],
+      "winner": 1,
+      "accepted": true
+    },
+    {
+      "index": 31,
+      "name": "checker",
+      "label": null,
+      "logits": [
+        2494,
+        -474,
+        151,
+        -2827,
+        2327
+      ],
+      "winner": 0,
+      "accepted": false
+    }
+  ],
+  "decision_cases": 922,
+  "class_names": [
+    "无法确定",
+    "露齿笑",
+    "闭眼微笑",
+    "哭泣",
+    "睁眼张嘴"
+  ],
+  "conservative_softmax_probability": 0.7,
+  "conservative_softmax_margin": 0.2,
+  "logit_unit": 0.00390625,
+  "model_sha256": "93e0d68b379a7bfb541d925769e47679d6b713020e5a320612ab2a799c8d5049"
+}

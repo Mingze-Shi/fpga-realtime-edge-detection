@@ -1,0 +1,20 @@
+{
+  "seed": 20261031,
+  "counts": {
+    "train": 640,
+    "synthetic_validation": 160,
+    "synthetic_test": 160
+  },
+  "independent_originals_per_positive_class": 1,
+  "source_overlap_between_synthetic_splits": true,
+  "exact_normalized_pixel_duplicates_between_splits": 0,
+  "raw_fpga_camera_frames": 0,
+  "photo_diagnostics_used_for_training": false,
+  "negative_types": [
+    "blank_or_noise",
+    "hair_accessory_clothing",
+    "partial_face",
+    "procedural_lines",
+    "room_background"
+  ]
+}

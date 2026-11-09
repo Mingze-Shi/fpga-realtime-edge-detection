@@ -1,0 +1,223 @@
+--- before/rtl/replay6_slots.v
++++ after/rtl/replay6_slots.v
+@@ -1,38 +1,38 @@
+ // Ten external DDR slots: six committed history frames plus protected live IO.
+ // Only metadata is kept here. The existing DDR IP and RAW video path are reused.
+-module replay6_slots #(parameter STRIDE=4147712,START_ADDR=0)(
++module replay6_slots #(parameter STRIDE=4147712,START_ADDR=0,HISTORY_FRAMES=6,SELECT_BITS=$clog2(HISTORY_FRAMES),SLOT_COUNT=HISTORY_FRAMES+4,SLOT_BITS=$clog2(SLOT_COUNT))(
+  input clk,rst_n,read_boundary,freeze_request,replay_request,
+  input delay_mode,
+- input [2:0] selection,
+- input write_begin,write_done,fault,input [3:0] committed_slot,reading_slot,
+- output write_ready,output reg [3:0] write_slot,read_slot,
+- output reg [3:0] live_slot,
+- output frozen,output replay_ready,output reg [2:0] selection_ack,
++ input [SELECT_BITS-1:0] selection,
++ input write_begin,write_done,fault,input [SLOT_BITS-1:0] committed_slot,reading_slot,
++ output write_ready,output reg [SLOT_BITS-1:0] write_slot,read_slot,
++ output reg [SLOT_BITS-1:0] live_slot,
++ output frozen,output replay_ready,output reg [SELECT_BITS-1:0] selection_ack,
+  output [31:0] write_address,read_address,
+  live_address,
+  output read_ready);
+- reg [3:0] history[0:5],saved[0:5];
+- reg [2:0] count;
++ reg [SLOT_BITS-1:0] history[0:HISTORY_FRAMES-1],saved[0:HISTORY_FRAMES-1];
++ reg [SELECT_BITS:0] count;
+  reg writing,locked,selected_valid,read_has_frame;
+  (* async_reg="true" *) reg fm,fs,rm,rs;
+- (* async_reg="true" *) reg [2:0] sm,ss;
+- reg [2:0] stable_select,last_select;
++ (* async_reg="true" *) reg [SELECT_BITS-1:0] sm,ss;
++ reg [SELECT_BITS-1:0] stable_select,last_select;
+  reg [2:0] stable_count;
+- reg [9:0] protect;
+- reg found;reg[3:0] candidate;
++ reg [SLOT_COUNT-1:0] protect;
++ reg found;reg[SLOT_BITS-1:0] candidate;
+  integer i,j;
+  always @* begin
+    protect=0;
+-   protect[read_slot]=1;protect[reading_slot]=1;
++   protect[read_slot]=1;protect[reading_slot]=1;protect[live_slot]=1;
+    if(writing)protect[write_slot]=1;
+-   for(integer k=0;k<6;k=k+1)begin
++   for(integer k=0;k<HISTORY_FRAMES;k=k+1)begin
+      if(k<count)protect[history[k]]=1;
+      if(locked)protect[saved[k]]=1;
+    end
+    found=0;candidate=0;
+-   for(integer k=9;k>=0;k=k-1)if(!protect[k])begin candidate=k;found=1;end
++   for(integer k=SLOT_COUNT-1;k>=0;k=k-1)if(!protect[k])begin candidate=k;found=1;end
+  end
+- assign write_ready=!writing && found && !fault && !locked && (!rs || count<6);
++ assign write_ready=!writing && found && !fault && !locked && (!rs || count<HISTORY_FRAMES);
+  // Candidate is combinational while idle; write_begin latches ownership before
+  // any AW. During a frame its address never changes, including delayed B.
+  assign write_address=START_ADDR+(writing ? write_slot:candidate)*STRIDE;
+@@ -44,33 +44,33 @@
+  always @(posedge clk or negedge rst_n)begin
+  if(!rst_n)begin
+   fm<=0;fs<=0;rm<=0;rs<=0;sm<=0;ss<=0;last_select<=0;stable_select<=0;stable_count<=0;
+-  count<=0;writing<=0;locked<=0;selected_valid<=0;read_has_frame<=0;write_slot<=0;read_slot<=9;selection_ack<=0;
+-live_slot<=9;
+-  for(i=0;i<6;i=i+1)begin history[i]<=0;saved[i]<=0;end
++  count<=0;writing<=0;locked<=0;selected_valid<=0;read_has_frame<=0;write_slot<=0;read_slot<=SLOT_COUNT-1;selection_ack<=0;
++live_slot<=SLOT_COUNT-1;
++  for(i=0;i<HISTORY_FRAMES;i=i+1)begin history[i]<=0;saved[i]<=0;end
+  end else begin
+   fm<=freeze_request;fs<=fm;rm<=replay_request;rs<=rm;sm<=selection;ss<=sm;
+   if(ss!=last_select)begin last_select<=ss;stable_count<=0;end
+   else if(stable_count<4)stable_count<=stable_count+1'b1;
+-  else if(ss<6)stable_select<=ss;
++  else if(ss<HISTORY_FRAMES)stable_select<=ss;
+   if(write_begin && write_ready)begin writing<=1;write_slot<=candidate;end
+   if(write_done && writing && committed_slot==write_slot && !fault)begin
+    writing<=0;
+-   for(j=5;j>0;j=j-1)history[j]<=history[j-1];
+-   history[0]<=write_slot;if(count<6)count<=count+1'b1;
++   for(j=HISTORY_FRAMES-1;j>0;j=j-1)history[j]<=history[j-1];
++   history[0]<=write_slot;if(count<HISTORY_FRAMES)count<=count+1'b1;
+   end
+   // A lost commit must not pin slot ownership forever: release it so the next
+   // frame can start once the commit tracker clears its fault.
+   if(fault)writing<=0;
+   // Lock the six latest fully committed frames. An in-flight frame completes
+   // first; no partially written frame can enter the frozen set.
+-  if(!delay_mode && rs && fs && !locked && !writing && count==6 && !fault)begin
+-   for(i=0;i<6;i=i+1)saved[i]<=history[i];
++  if(!delay_mode && rs && fs && !locked && !writing && count==HISTORY_FRAMES && !fault)begin
++   for(i=0;i<HISTORY_FRAMES;i=i+1)saved[i]<=history[i];
+    locked<=1;selected_valid<=0;selection_ack<=0;
+   end
+   if(read_boundary)begin
+   if(count!=0 && !fault)live_slot<=history[0];
+    if(delay_mode)begin
+-   if(count!=0)begin read_slot<=history[stable_select];read_has_frame<=1;end
++   if(count!=0 && stable_select<count)begin read_slot<=history[stable_select];read_has_frame<=1;end
+    locked<=0;selected_valid<=0;selection_ack<=stable_select;
+   end else if(locked && rs && !fault)begin read_slot<=saved[stable_select];selection_ack<=stable_select;selected_valid<=1;read_has_frame<=1;end
+    else if(!rs)begin
+--- before/rtl/sc431_sobel_video.v
++++ after/rtl/sc431_sobel_video.v
+@@ -48,7 +48,7 @@
+     wire map_valid_control,work_reset_control,overlay_visible,processed_edge;
+     generate if(SNAPSHOT_ENABLE) begin : snapshot_control
+         wire freeze_request_int;
+-        canny_snapshot_control #(.REPLAY_FRAMES(REPLAY_FRAMES),.RELEASE_FRAMES(REPLAY_FRAMES==6 ? 8:2),
++        canny_snapshot_control #(.REPLAY_FRAMES(REPLAY_FRAMES),.RELEASE_FRAMES(REPLAY_FRAMES>=6 ? 8:2),
+             .AUTO_REPLAY(AUTO_REPLAY),.PLAY_FRAMES(PLAY_FRAMES)) u_control(
+             .clk(clk),.rst_n(rst_n),.frame_start(vs_in && !vs_previous),
+             .mode_active(display_mode_active),.user_freeze_toggle(user_freeze_toggle),
+--- before/rtl/ti60f225_oob_top.v
++++ after/rtl/ti60f225_oob_top.v
+@@ -503,7 +503,7 @@
+ wire freeze_requested;
+ wire compare_request;
+ wire replay_requested,freeze_ack,replay_ack;
+-wire [2:0] replay_select,replay_selection_ack;
++wire [5:0] replay_select,replay_selection_ack;
+ // IMX219
+   frame_buffer #(
+ .I_VID_WIDTH         (32),
+@@ -514,8 +514,8 @@
+ .WR_FIFO_DEPTH	      ( 1024		),    
+ .RD_FIFO_DEPTH 	      ( 1024 	),
+ .BURST_LEN  	        (127),
+-.FB_NUM                 (10),
+-.REPLAY_FRAMES(6),
++.FB_NUM                 (64),
++.REPLAY_FRAMES(60),
+ .REPLAY_ENABLE        (1),
+ .MAX_VID_WIDTH	      (960) ,
+ .MAX_VID_HIGHT	      (1080),
+@@ -1461,7 +1461,7 @@
+ wire [7:0] cam_green = hdmi_tx_gdata >> expo_post;
+ wire [7:0] cam_blue  = hdmi_tx_bdata >> expo_post;
+ sc431_sobel_video #(
+-    .REPLAY_FRAMES(6),.AUTO_REPLAY(1),.PLAY_FRAMES(6),.CANNY_ENABLE(1),.CANNY_WIDTH(640),.CANNY_HEIGHT(480),.CANNY_MEDIAN_ENABLE(1),.SNAPSHOT_ENABLE(1),.PHOTO_MATCH_ENABLE(1),.EXPRESSION_ENABLE(0),.CNN_ENABLE(1),.CNN_EXPRESSION_ENABLE(1)) u_camera_sobel (
++    .REPLAY_FRAMES(60),.AUTO_REPLAY(1),.PLAY_FRAMES(6),.CANNY_ENABLE(1),.CANNY_WIDTH(640),.CANNY_HEIGHT(480),.CANNY_MEDIAN_ENABLE(1),.SNAPSHOT_ENABLE(1),.PHOTO_MATCH_ENABLE(1),.EXPRESSION_ENABLE(0),.CNN_ENABLE(1),.CNN_EXPRESSION_ENABLE(1)) u_camera_sobel (
+     .clk(hdmi_tx_slow_clk), .rst_n(vid_rst_n),
+     .increase_n(KEY1_N), .decrease_n(KEY2_N), .mode_n(KEY3_N),
+     .de_in(hdmi_tx_de), .hs_in(hdmi_tx_hs), .vs_in(hdmi_tx_vs),
+--- before/rtl/frame_buffer_V4/ddr_buffer.v
++++ after/rtl/frame_buffer_V4/ddr_buffer.v
+@@ -138,7 +138,7 @@
+  else if(size_resync) captured_frame_words<=0;
+  else if(slot_begin && captured_frame_words==0) captured_frame_words<=wr_busrt_len;
+ wire write_size_ok=(captured_frame_words==0 || wr_busrt_len==captured_frame_words);
+-wire guarded_write_start=wr_start && (FB_NUM!=10 || write_size_ok);
++wire guarded_write_start=wr_start && (FB_NUM<10 || write_size_ok);
+ (* async_reg="true" *) reg rd_period_meta,rd_period_sync;
+ reg rd_period_d;
+ always @(posedge axi_clk or negedge axi_clk_rst_n)
+@@ -148,7 +148,7 @@
+ always @(posedge axi_clk or negedge axi_clk_rst_n)
+  if(!axi_clk_rst_n)read_launch<=0;
+  else read_launch<=rd_period_sync && !rd_period_d;
+-wire guarded_read_start=FB_NUM==10 ? (read_launch && read_slot_ready):rd_start;
++wire guarded_read_start=FB_NUM>=10 ? (read_launch && read_slot_ready):rd_start;
+ 
+ wire [1:0] wr_bank,rd_bank;
+ wire [AXI_ADDR_WIDTH-1:0] committed_addr;
+@@ -168,7 +168,7 @@
+     .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+     .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+     .WR_FIFO_DEPTH(WR_FIFO_DEPTH),
+-    .SLOT_GUARD(FB_NUM==10),
++    .SLOT_GUARD(FB_NUM>=10),
+     .BURST_LEN (BURST_LEN        )
+   )
+ 
+@@ -229,8 +229,8 @@
+     .axi_clk_rst_n(axi_clk_rst_n),
+     .start(guarded_read_start),
+     .start_addr(rd_start_addr),//(0),//
+-    .burst_len(FB_NUM==10 ? captured_frame_words[24:0]:rd_burst_len[24:0]),
+-    .split_enable(FB_NUM==10 && split_request),
++    .burst_len(FB_NUM>=10 ? captured_frame_words[24:0]:rd_burst_len[24:0]),
++    .split_enable(FB_NUM>=10 && split_request),
+     .split_addr(live_addr[AXI_ADDR_WIDTH-1:0]),
+     .rd_fifo_rdclk(rd_fifo_rdclk),
+     .rd_fifo_rst_p (rd_fifo_rst_p),
+@@ -266,23 +266,24 @@
+   
+ 
+ 
+-generate if(FB_NUM==10) begin : six_frame
+-function [3:0] slot_of;
++generate if(FB_NUM>=10) begin : six_frame
++localparam SLOT_BITS=$clog2(FB_NUM);
++function [SLOT_BITS-1:0] slot_of;
+  input [AXI_ADDR_WIDTH-1:0] address;
+  integer n;
+  begin
+   slot_of=0;
+-  for(n=1;n<10;n=n+1) if(address>=START_ADDR+n*FRAME_STRIDE)slot_of=n;
++  for(n=1;n<FB_NUM;n=n+1) if(address>=START_ADDR+n*FRAME_STRIDE)slot_of=n;
+  end
+ endfunction
+-wire [3:0] ws,rs;
++wire [SLOT_BITS-1:0] ws,rs;
+ wire [31:0] wa,ra;
+ reg rd_sw_d;
+ wire bootstrap_boundary=rd_period_sync && !rd_period_d && !read_slot_ready;
+ 
+ always @(posedge axi_clk or negedge axi_clk_rst_n)
+  if(!axi_clk_rst_n)rd_sw_d<=0;else rd_sw_d<=rd_sw;
+-replay6_slots #(.STRIDE(FRAME_STRIDE),.START_ADDR(START_ADDR)) u_slots(
++replay6_slots #(.STRIDE(FRAME_STRIDE),.START_ADDR(START_ADDR),.HISTORY_FRAMES(REPLAY_FRAMES)) u_slots(
+  .clk(axi_clk),.rst_n(axi_clk_rst_n),.read_boundary((rd_sw&&!rd_sw_d)||bootstrap_boundary),
+  .freeze_request(freeze_request),.replay_request(replay_request),.delay_mode(split_request),.selection(replay_select),
+  .write_begin(slot_begin),.write_done(frame_committed),.fault(commit_fault),
+--- before/rtl/frame_buffer_V4/frame_buffer.v
++++ after/rtl/frame_buffer_V4/frame_buffer.v
+@@ -197,7 +197,7 @@
+     .rd_clk_rst_n (rd_clk_rst_n),
+     
+ 
+-/*i*/.wr_start	      (frame_start && (FB_NUM!=10 || (frame_stable && ddr_frame_len!=0 && ddr_frame_len<=MAX_VID_WIDTH*MAX_VID_HIGHT*I_VID_WIDTH/AXI_DATA_WIDTH))),// Capacity is an upper bound; actual packed frame size is measured.
++/*i*/.wr_start	      (frame_start && (FB_NUM<10 || (frame_stable && ddr_frame_len!=0 && ddr_frame_len<=MAX_VID_WIDTH*MAX_VID_HIGHT*I_VID_WIDTH/AXI_DATA_WIDTH))),// Capacity is an upper bound; actual packed frame size is measured.
+ /*i*/.rd_start	      (fifo_rd_period),// && frame_stable
+     .wr_busrt_len     (ddr_frame_len ),//ddr address scope for one frame
+     .rd_burst_len     (ddr_frame_len ),//ddr address scope for one frame

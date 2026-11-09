@@ -1,0 +1,59 @@
+{
+  "weight_count": 940,
+  "weight_fraction_bits": 7,
+  "activation_exponents": [
+    -8,
+    -5,
+    -3,
+    -1
+  ],
+  "shifts": [
+    10,
+    9,
+    9
+  ],
+  "biases": [
+    [
+      -29192,
+      -1925,
+      -14430,
+      2559
+    ],
+    [
+      -1060,
+      -772,
+      760,
+      -73,
+      -1067,
+      899,
+      1294,
+      823
+    ],
+    [
+      72,
+      34,
+      83,
+      -132,
+      -460,
+      67,
+      -117,
+      363
+    ],
+    [
+      161,
+      -100,
+      -15,
+      97,
+      7
+    ]
+  ],
+  "calibration_split": "train",
+  "calibration_maxima": [
+    5.186823844909668,
+    16.388025283813477,
+    101.70442962646484
+  ],
+  "activation_buffers_bytes": 2048,
+  "weight_rom_depth": 1024,
+  "rtl_integration_completed": false
+}

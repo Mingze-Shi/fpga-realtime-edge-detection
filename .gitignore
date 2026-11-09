@@ -1,0 +1,15 @@
+# 本地构建结果与便携工具（脚本中的工具路径需自行配置）
+Ti60_replay60_streamCanny_20261102/outflow*/
+Ti60_replay60_streamCanny_20261102/work_*/
+Ti60_replay60_streamCanny_20261102/test_output/
+Ti60_replay60_streamCanny_20261102/tools/iverilog-portable/
+*.log
+*.vvp
+__pycache__/
+.env
+.env.*
+
+# 通讯记录和采样照片不纳入公开仓库
+Ti60_replay60_streamCanny_20261102/assets/expressions/source/
+Ti60_replay60_streamCanny_20261102/cnn/**/photo_diagnostics/
+Ti60_replay60_streamCanny_20261102/cnn/**/sources/

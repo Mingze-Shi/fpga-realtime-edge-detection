@@ -1,0 +1,7 @@
+{
+  "second_training_completed": true,
+  "epochs": 160,
+  "all_checkpoint_tensors_identical": true,
+  "all_dataset_arrays_identical": true,
+  "int8_weights_identical": true
+}

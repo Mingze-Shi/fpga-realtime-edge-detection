@@ -1,0 +1,85 @@
+{
+  "classes": [
+    {
+      "id": 0,
+      "label": "other_invalid",
+      "name_zh": "其他或无效画面"
+    },
+    {
+      "id": 1,
+      "label": "teeth_smile",
+      "name_zh": "露齿笑"
+    },
+    {
+      "id": 2,
+      "label": "closed_eye_smile",
+      "name_zh": "闭眼微笑"
+    },
+    {
+      "id": 3,
+      "label": "crying",
+      "name_zh": "哭泣"
+    },
+    {
+      "id": 4,
+      "label": "open_eye_open_mouth",
+      "name_zh": "睁眼张嘴"
+    }
+  ],
+  "mapping": [
+    {
+      "class_id": 1,
+      "label": "teeth_smile",
+      "name_zh": "露齿笑",
+      "source": "sources/微信图片_202610281715_1.jpg",
+      "crop": [
+        230,
+        690,
+        1030,
+        1090
+      ],
+      "sha256": "3066fd4bd5c210ea4ea88e074a8af81ce9b08a4895bb3f966eaf0044c7b7a3e9"
+    },
+    {
+      "class_id": 2,
+      "label": "closed_eye_smile",
+      "name_zh": "闭眼微笑",
+      "source": "sources/微信图片_202610281715_2.jpg",
+      "crop": [
+        280,
+        630,
+        1040,
+        1010
+      ],
+      "sha256": "a230e1d476b4de1ba0e00a10ad2ae90f16c4d9fd4caaeb448e8fcce5d71d9469"
+    },
+    {
+      "class_id": 3,
+      "label": "crying",
+      "name_zh": "哭泣",
+      "source": "sources/微信图片_202610281715_3.jpg",
+      "crop": [
+        280,
+        710,
+        1060,
+        1100
+      ],
+      "sha256": "da6e2f623fd0559dad06eaaa1b73455664b77b8e482fa31d8784f75afad1adaa"
+    },
+    {
+      "class_id": 4,
+      "label": "open_eye_open_mouth",
+      "name_zh": "睁眼张嘴",
+      "source": "sources/微信图片_202610282000_5.jpg",
+      "crop": [
+        220,
+        500,
+        900,
+        840
+      ],
+      "sha256": "c5e18500fbbfe174394e93c2b364076fa41b46ec22950a4eb58238d55d4ce379"
+    }
+  ],
+  "excluded": "微信图片_202610281954_4.jpg: red-circle annotation, duplicate of closed-eye smile",
+  "semantic_scope": "Four supplied drawing patterns; not general emotion or identity recognition"
+}
