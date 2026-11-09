@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-11-01T21:04:39.7893874+08:00",
+  "mode": "Flash",
+  "bit_sha256": "1b7756f0411cde22202155fb800c9b634a1a2900cd6bdb4b7b0b686e457f1702",
+  "hex_sha256": "79be0af83ad4750ad7ce3273aec0cfcca1b5794c375e4b6107db0143b3f68e9e",
+  "exit_code": 0,
+  "flash_modified": true,
+  "power_cycle_verified": false,
+  "physical_hdmi_verified": false,
+  "log": "program_autoplay_flash.log"
+}

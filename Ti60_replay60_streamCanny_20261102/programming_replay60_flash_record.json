@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-11-01T21:16:40.2177016+08:00",
+  "mode": "Flash",
+  "replay_frames": 60,
+  "device_id": "0x10660A79",
+  "bit_sha256": "0f78f9c5958a0fed5ae27628af866c34adfa34cf749a2ad238a87311c6ca1f9b",
+  "hex_sha256": "c91e1862ca06003cacfceeda63648997e107c4537471bbd2a2323b1ede602e2e",
+  "exit_code": 0,
+  "flash_verify_success": true,
+  "final_jtag_load_success": true,
+  "power_cycle_verified": false,
+  "physical_hdmi_verified": false,
+  "log": "program_replay60_flash.log"
+}

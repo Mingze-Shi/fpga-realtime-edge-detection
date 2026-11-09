@@ -1,0 +1,28 @@
+{
+  "device": "Ti60F225",
+  "timing_model": "I3",
+  "replay_frames": 60,
+  "slots": 64,
+  "ddr_reserved_bytes": 265453568,
+  "memory_blocks": 249,
+  "lut4": 29530,
+  "flip_flops": 12564,
+  "dsp_blocks": 62,
+  "setup_min_slack_ns": 0.415,
+  "hold_min_slack_ns": 0.026,
+  "programmed_to_board": false,
+  "physical_hdmi_verified": false,
+  "full_resolution_simulation_run": false,
+  "artifacts": {
+    "bit": {
+      "path": "outflow_cnn/ti60f225_oob.bit",
+      "sha256": "0f78f9c5958a0fed5ae27628af866c34adfa34cf749a2ad238a87311c6ca1f9b",
+      "bytes": 2916702
+    },
+    "hex": {
+      "path": "outflow_cnn/ti60f225_oob.hex",
+      "sha256": "c91e1862ca06003cacfceeda63648997e107c4537471bbd2a2323b1ede602e2e",
+      "bytes": 2916762
+    }
+  }
+}

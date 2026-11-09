@@ -1,0 +1,357 @@
+// Conservative Q16 softmax bound. Integer logits represent natural scores /256.
+// exp(-delta/256) is rounded UP at bins of 16 integer score units.
+// Therefore probability and top-two margin are lower bounds, never optimistic.
+module expression_cnn_decision #(
+ parameter integer PROB_NUM=55,PROB_DEN=100,MARGIN_NUM=1,MARGIN_DEN=5
+)(input signed [31:0] logit0,logit1,logit2,logit3,logit4,
+ output reg [2:0] class_id,output accepted,output probability_pass,margin_pass);
+ function [16:0] exp_upper;
+ input [7:0] bin;
+ begin case(bin)
+8'd0:exp_upper=17'd65536;
+8'd1:exp_upper=17'd61566;
+8'd2:exp_upper=17'd57836;
+8'd3:exp_upper=17'd54332;
+8'd4:exp_upper=17'd51040;
+8'd5:exp_upper=17'd47948;
+8'd6:exp_upper=17'd45043;
+8'd7:exp_upper=17'd42314;
+8'd8:exp_upper=17'd39750;
+8'd9:exp_upper=17'd37342;
+8'd10:exp_upper=17'd35079;
+8'd11:exp_upper=17'd32954;
+8'd12:exp_upper=17'd30958;
+8'd13:exp_upper=17'd29082;
+8'd14:exp_upper=17'd27320;
+8'd15:exp_upper=17'd25665;
+8'd16:exp_upper=17'd24110;
+8'd17:exp_upper=17'd22649;
+8'd18:exp_upper=17'd21277;
+8'd19:exp_upper=17'd19988;
+8'd20:exp_upper=17'd18777;
+8'd21:exp_upper=17'd17639;
+8'd22:exp_upper=17'd16571;
+8'd23:exp_upper=17'd15567;
+8'd24:exp_upper=17'd14624;
+8'd25:exp_upper=17'd13738;
+8'd26:exp_upper=17'd12905;
+8'd27:exp_upper=17'd12123;
+8'd28:exp_upper=17'd11389;
+8'd29:exp_upper=17'd10699;
+8'd30:exp_upper=17'd10051;
+8'd31:exp_upper=17'd9442;
+8'd32:exp_upper=17'd8870;
+8'd33:exp_upper=17'd8332;
+8'd34:exp_upper=17'd7828;
+8'd35:exp_upper=17'd7353;
+8'd36:exp_upper=17'd6908;
+8'd37:exp_upper=17'd6489;
+8'd38:exp_upper=17'd6096;
+8'd39:exp_upper=17'd5727;
+8'd40:exp_upper=17'd5380;
+8'd41:exp_upper=17'd5054;
+8'd42:exp_upper=17'd4748;
+8'd43:exp_upper=17'd4460;
+8'd44:exp_upper=17'd4190;
+8'd45:exp_upper=17'd3936;
+8'd46:exp_upper=17'd3698;
+8'd47:exp_upper=17'd3474;
+8'd48:exp_upper=17'd3263;
+8'd49:exp_upper=17'd3066;
+8'd50:exp_upper=17'd2880;
+8'd51:exp_upper=17'd2705;
+8'd52:exp_upper=17'd2542;
+8'd53:exp_upper=17'd2388;
+8'd54:exp_upper=17'd2243;
+8'd55:exp_upper=17'd2107;
+8'd56:exp_upper=17'd1980;
+8'd57:exp_upper=17'd1860;
+8'd58:exp_upper=17'd1747;
+8'd59:exp_upper=17'd1641;
+8'd60:exp_upper=17'd1542;
+8'd61:exp_upper=17'd1448;
+8'd62:exp_upper=17'd1361;
+8'd63:exp_upper=17'd1278;
+8'd64:exp_upper=17'd1201;
+8'd65:exp_upper=17'd1128;
+8'd66:exp_upper=17'd1060;
+8'd67:exp_upper=17'd996;
+8'd68:exp_upper=17'd935;
+8'd69:exp_upper=17'd879;
+8'd70:exp_upper=17'd825;
+8'd71:exp_upper=17'd775;
+8'd72:exp_upper=17'd729;
+8'd73:exp_upper=17'd684;
+8'd74:exp_upper=17'd643;
+8'd75:exp_upper=17'd604;
+8'd76:exp_upper=17'd567;
+8'd77:exp_upper=17'd533;
+8'd78:exp_upper=17'd501;
+8'd79:exp_upper=17'd471;
+8'd80:exp_upper=17'd442;
+8'd81:exp_upper=17'd415;
+8'd82:exp_upper=17'd390;
+8'd83:exp_upper=17'd367;
+8'd84:exp_upper=17'd344;
+8'd85:exp_upper=17'd324;
+8'd86:exp_upper=17'd304;
+8'd87:exp_upper=17'd286;
+8'd88:exp_upper=17'd268;
+8'd89:exp_upper=17'd252;
+8'd90:exp_upper=17'd237;
+8'd91:exp_upper=17'd223;
+8'd92:exp_upper=17'd209;
+8'd93:exp_upper=17'd196;
+8'd94:exp_upper=17'd185;
+8'd95:exp_upper=17'd173;
+8'd96:exp_upper=17'd163;
+8'd97:exp_upper=17'd153;
+8'd98:exp_upper=17'd144;
+8'd99:exp_upper=17'd135;
+8'd100:exp_upper=17'd127;
+8'd101:exp_upper=17'd119;
+8'd102:exp_upper=17'd112;
+8'd103:exp_upper=17'd105;
+8'd104:exp_upper=17'd99;
+8'd105:exp_upper=17'd93;
+8'd106:exp_upper=17'd87;
+8'd107:exp_upper=17'd82;
+8'd108:exp_upper=17'd77;
+8'd109:exp_upper=17'd73;
+8'd110:exp_upper=17'd68;
+8'd111:exp_upper=17'd64;
+8'd112:exp_upper=17'd60;
+8'd113:exp_upper=17'd57;
+8'd114:exp_upper=17'd53;
+8'd115:exp_upper=17'd50;
+8'd116:exp_upper=17'd47;
+8'd117:exp_upper=17'd44;
+8'd118:exp_upper=17'd42;
+8'd119:exp_upper=17'd39;
+8'd120:exp_upper=17'd37;
+8'd121:exp_upper=17'd35;
+8'd122:exp_upper=17'd32;
+8'd123:exp_upper=17'd31;
+8'd124:exp_upper=17'd29;
+8'd125:exp_upper=17'd27;
+8'd126:exp_upper=17'd25;
+8'd127:exp_upper=17'd24;
+8'd128:exp_upper=17'd22;
+ default:exp_upper=17'd22;
+ endcase end endfunction
+ reg signed [31:0] scores[0:4];
+ reg signed [31:0] best,second;
+ reg signed [32:0] delta;
+ reg [19:0] denom;
+ reg [16:0] second_exp;
+ reg [7:0] bin;
+ integer i;
+ always @* begin
+  scores[0]=logit0;scores[1]=logit1;scores[2]=logit2;scores[3]=logit3;scores[4]=logit4;
+  best=logit0;second=32'sh80000000;class_id=0;
+  for(i=1;i<5;i=i+1)begin
+   if(scores[i]>best)begin second=best;best=scores[i];class_id=i;end
+   else if(scores[i]>second)second=scores[i];
+  end
+  denom=0;delta=0;bin=0;
+  for(i=0;i<5;i=i+1)begin
+   delta=$signed({best[31],best})-$signed({scores[i][31],scores[i]});
+   bin=delta>=2048 ? 8'd128:delta[11:4];
+   denom=denom+exp_upper(bin);
+  end
+  delta=$signed({best[31],best})-$signed({second[31],second});
+  bin=delta>=2048 ? 8'd128:delta[11:4];second_exp=exp_upper(bin);
+ end
+ assign probability_pass=32'd65536*PROB_DEN >= denom*PROB_NUM;
+ assign margin_pass=(32'd65536-second_exp)*MARGIN_DEN >= denom*MARGIN_NUM;
+ assign accepted=class_id!=0 && probability_pass && margin_pass;
+endmodule
+
+// Synthesized sequential implementation: bounded work per clock, same oracle.
+module expression_cnn_decision_seq(
+ input clk,rst_n,start,
+ input signed [31:0] logit0,logit1,logit2,logit3,logit4,
+ output reg busy,done,output reg [2:0] class_id,
+ output reg accepted,probability_pass,margin_pass);
+ function [16:0] exp_upper;
+ input [7:0] bin;
+ begin case(bin)
+8'd0:exp_upper=17'd65536;
+8'd1:exp_upper=17'd61566;
+8'd2:exp_upper=17'd57836;
+8'd3:exp_upper=17'd54332;
+8'd4:exp_upper=17'd51040;
+8'd5:exp_upper=17'd47948;
+8'd6:exp_upper=17'd45043;
+8'd7:exp_upper=17'd42314;
+8'd8:exp_upper=17'd39750;
+8'd9:exp_upper=17'd37342;
+8'd10:exp_upper=17'd35079;
+8'd11:exp_upper=17'd32954;
+8'd12:exp_upper=17'd30958;
+8'd13:exp_upper=17'd29082;
+8'd14:exp_upper=17'd27320;
+8'd15:exp_upper=17'd25665;
+8'd16:exp_upper=17'd24110;
+8'd17:exp_upper=17'd22649;
+8'd18:exp_upper=17'd21277;
+8'd19:exp_upper=17'd19988;
+8'd20:exp_upper=17'd18777;
+8'd21:exp_upper=17'd17639;
+8'd22:exp_upper=17'd16571;
+8'd23:exp_upper=17'd15567;
+8'd24:exp_upper=17'd14624;
+8'd25:exp_upper=17'd13738;
+8'd26:exp_upper=17'd12905;
+8'd27:exp_upper=17'd12123;
+8'd28:exp_upper=17'd11389;
+8'd29:exp_upper=17'd10699;
+8'd30:exp_upper=17'd10051;
+8'd31:exp_upper=17'd9442;
+8'd32:exp_upper=17'd8870;
+8'd33:exp_upper=17'd8332;
+8'd34:exp_upper=17'd7828;
+8'd35:exp_upper=17'd7353;
+8'd36:exp_upper=17'd6908;
+8'd37:exp_upper=17'd6489;
+8'd38:exp_upper=17'd6096;
+8'd39:exp_upper=17'd5727;
+8'd40:exp_upper=17'd5380;
+8'd41:exp_upper=17'd5054;
+8'd42:exp_upper=17'd4748;
+8'd43:exp_upper=17'd4460;
+8'd44:exp_upper=17'd4190;
+8'd45:exp_upper=17'd3936;
+8'd46:exp_upper=17'd3698;
+8'd47:exp_upper=17'd3474;
+8'd48:exp_upper=17'd3263;
+8'd49:exp_upper=17'd3066;
+8'd50:exp_upper=17'd2880;
+8'd51:exp_upper=17'd2705;
+8'd52:exp_upper=17'd2542;
+8'd53:exp_upper=17'd2388;
+8'd54:exp_upper=17'd2243;
+8'd55:exp_upper=17'd2107;
+8'd56:exp_upper=17'd1980;
+8'd57:exp_upper=17'd1860;
+8'd58:exp_upper=17'd1747;
+8'd59:exp_upper=17'd1641;
+8'd60:exp_upper=17'd1542;
+8'd61:exp_upper=17'd1448;
+8'd62:exp_upper=17'd1361;
+8'd63:exp_upper=17'd1278;
+8'd64:exp_upper=17'd1201;
+8'd65:exp_upper=17'd1128;
+8'd66:exp_upper=17'd1060;
+8'd67:exp_upper=17'd996;
+8'd68:exp_upper=17'd935;
+8'd69:exp_upper=17'd879;
+8'd70:exp_upper=17'd825;
+8'd71:exp_upper=17'd775;
+8'd72:exp_upper=17'd729;
+8'd73:exp_upper=17'd684;
+8'd74:exp_upper=17'd643;
+8'd75:exp_upper=17'd604;
+8'd76:exp_upper=17'd567;
+8'd77:exp_upper=17'd533;
+8'd78:exp_upper=17'd501;
+8'd79:exp_upper=17'd471;
+8'd80:exp_upper=17'd442;
+8'd81:exp_upper=17'd415;
+8'd82:exp_upper=17'd390;
+8'd83:exp_upper=17'd367;
+8'd84:exp_upper=17'd344;
+8'd85:exp_upper=17'd324;
+8'd86:exp_upper=17'd304;
+8'd87:exp_upper=17'd286;
+8'd88:exp_upper=17'd268;
+8'd89:exp_upper=17'd252;
+8'd90:exp_upper=17'd237;
+8'd91:exp_upper=17'd223;
+8'd92:exp_upper=17'd209;
+8'd93:exp_upper=17'd196;
+8'd94:exp_upper=17'd185;
+8'd95:exp_upper=17'd173;
+8'd96:exp_upper=17'd163;
+8'd97:exp_upper=17'd153;
+8'd98:exp_upper=17'd144;
+8'd99:exp_upper=17'd135;
+8'd100:exp_upper=17'd127;
+8'd101:exp_upper=17'd119;
+8'd102:exp_upper=17'd112;
+8'd103:exp_upper=17'd105;
+8'd104:exp_upper=17'd99;
+8'd105:exp_upper=17'd93;
+8'd106:exp_upper=17'd87;
+8'd107:exp_upper=17'd82;
+8'd108:exp_upper=17'd77;
+8'd109:exp_upper=17'd73;
+8'd110:exp_upper=17'd68;
+8'd111:exp_upper=17'd64;
+8'd112:exp_upper=17'd60;
+8'd113:exp_upper=17'd57;
+8'd114:exp_upper=17'd53;
+8'd115:exp_upper=17'd50;
+8'd116:exp_upper=17'd47;
+8'd117:exp_upper=17'd44;
+8'd118:exp_upper=17'd42;
+8'd119:exp_upper=17'd39;
+8'd120:exp_upper=17'd37;
+8'd121:exp_upper=17'd35;
+8'd122:exp_upper=17'd32;
+8'd123:exp_upper=17'd31;
+8'd124:exp_upper=17'd29;
+8'd125:exp_upper=17'd27;
+8'd126:exp_upper=17'd25;
+8'd127:exp_upper=17'd24;
+8'd128:exp_upper=17'd22;
+ default:exp_upper=17'd22;
+ endcase end endfunction
+
+ localparam IDLE=0,SCAN=1,LOAD=2,DIFF=3,BIN=4,LOOK=5,SUM=6,RATIO=7,FINISH=8;
+ reg [3:0] state;
+ reg [2:0] index,winner;
+ reg signed [31:0] best,current_score;
+ reg signed [32:0] delta;
+ reg [7:0] exp_bin;
+ reg [16:0] exp_value,second_exp;
+ reg [19:0] denominator;
+ reg signed [31:0] selected_score;
+ always @* begin
+  case(index)
+   0:selected_score=logit0;1:selected_score=logit1;2:selected_score=logit2;
+   3:selected_score=logit3;default:selected_score=logit4;
+  endcase
+ end
+ always @(posedge clk or negedge rst_n)begin
+  if(!rst_n)begin
+   state<=IDLE;busy<=0;done<=0;class_id<=0;accepted<=0;probability_pass<=0;margin_pass<=0;
+   index<=0;winner<=0;best<=0;current_score<=0;delta<=0;exp_bin<=0;exp_value<=0;second_exp<=0;denominator<=0;
+  end else begin
+   done<=0;
+   case(state)
+    IDLE:if(start)begin busy<=1;best<=logit0;winner<=0;index<=1;second_exp<=0;denominator<=0;state<=SCAN;end
+    SCAN:begin
+     if(selected_score>best)begin best<=selected_score;winner<=index;end
+     if(index==4)begin index<=0;state<=LOAD;end else index<=index+1'b1;
+    end
+    LOAD:begin current_score<=selected_score;state<=DIFF;end
+    DIFF:begin delta<=$signed({best[31],best})-$signed({current_score[31],current_score});state<=BIN;end
+    BIN:begin exp_bin<=delta>=2048 ? 8'd128:delta[11:4];state<=LOOK;end
+    LOOK:begin exp_value<=exp_upper(exp_bin);state<=SUM;end
+    SUM:begin
+     denominator<=denominator+exp_value;
+     if(index!=winner && exp_value>second_exp)second_exp<=exp_value;
+     if(index==4)state<=RATIO;else begin index<=index+1'b1;state<=LOAD;end
+    end
+    RATIO:begin
+     probability_pass<=32'd655360>=denominator*6;
+     margin_pass<=(32'd65536-second_exp)*5>=denominator;
+     state<=FINISH;
+    end
+    FINISH:begin class_id<=winner;accepted<=winner!=0 && probability_pass && margin_pass;busy<=0;done<=1;state<=IDLE;end
+    default:begin state<=IDLE;busy<=0;end
+   endcase
+  end
+ end
+endmodule
