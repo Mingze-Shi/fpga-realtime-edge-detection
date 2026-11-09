@@ -1,0 +1,15 @@
+{
+  "artifact": "outflow_filter5/ti60f225_oob.bit",
+  "sha256": "2C2404DA920F51BE82634108CC8859919C22234D7CAE36046A788641C2935ECC",
+  "bytes": 2917983,
+  "programming_mode": "JTAG SRAM",
+  "programmer_exit_code": 0,
+  "device_id": "0x10660A79",
+  "setup_min_slack_ns": 0.449,
+  "hold_min_slack_ns": 0.026,
+  "cleanup": "Require two nonzero neighbours; weak centre also requires a strong neighbour",
+  "simulation_passed": true,
+  "display_verified": false,
+  "image_quality_verified": false,
+  "rollback": "delivery_filter5_before_cleanup/ti60f225_oob.bit"
+}
